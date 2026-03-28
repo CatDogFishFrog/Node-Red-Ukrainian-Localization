@@ -1,0 +1,37 @@
+<!--
+  Copyright JS Foundation and other contributors, http://js.foundation
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<script type="text/html" data-help-name="html">
+    <p>Витягує елементи з html документа, що міститься у <code>msg.payload</code>, використовуючи CSS selector.</p>
+    <h3>Входи (Inputs)</h3>
+    <dl class="message-properties">
+    <dt>payload <span class="property-type">string</span></dt>
+    <dd>html string, з якого потрібно витягти елементи.</dd>
+    <dt class="optional">select <span class="property-type">string</span></dt>
+    <dd>якщо не налаштовано на панелі редагування, selector можна задати як властивість повідомлення (<code>msg.select</code>).</dd>
+</dl>
+    <h3>Вихід (Output)</h3>
+    <dl class="message-properties">
+        <dt>payload <span class="property-type">array | string</span></dt>
+        <dd>результатом може бути або одне повідомлення з payload, що містить array знайдених елементів, або кілька повідомлень, кожне з яких містить знайдений елемент. Якщо надсилається кілька повідомлень, у них також буде встановлено властивість <code>parts</code>.</dd>
+    </dl>
+    <h3>Деталі</h3>
+    <p>Цей вузол підтримує комбінацію CSS та jQuery селекторів. Перегляньте
+    <a href="https://github.com/fb55/CSSselect#user-content-supported-selectors" target="_blank">документацію css-select</a> для отримання додаткової інформації щодо синтаксису, який підтримується.</p>
+    <div class="translator-note" style="border-left: 4px solid #17a2b8; padding: 10px; margin: 10px 0; background-color: #f8f9fa;">
+        <strong>Примітка перекладача:</strong> Цей вузол використовує бібліотеку Cheerio під капотом, що робить його ідеальним інструментом для web scraping (збору даних з веб-сторінок). Наприклад, передавши селектор <code>div.article-content > p</code>, вузол витягне всі абзаци зі статті. Вузол можна налаштувати на повернення чистого тексту, що міститься в елементі, або повного HTML-коду знайденого елемента.
+    </div>
+</script>

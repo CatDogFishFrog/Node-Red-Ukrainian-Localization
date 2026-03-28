@@ -1,0 +1,53 @@
+<!--
+  Copyright JS Foundation and other contributors, http://js.foundation
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<script type="text/html" data-help-name="csv">
+    <p>Конвертує CSV відформатований string у його представлення у вигляді JavaScript object та навпаки.</p>
+    <h3>Входи (Inputs)</h3>
+    <dl class="message-properties">
+        <dt>payload<span class="property-type">object | array | string</span></dt>
+        <dd>JavaScript object, array або CSV string.</dd>
+    </dl>
+    <h3>Виходи (Outputs)</h3>
+    <dl class="message-properties">
+        <dt>payload<span class="property-type">object | array | string</span></dt>
+        <dd>
+        <ul>
+            <li>Якщо на вході string, він намагається розпарсити його як CSV і створює JavaScript object з парами ключ/значення (key/value) для кожного рядка. Потім вузол надішле або повідомлення для кожного рядка, або одне повідомлення, що містить array об'єктів.</li>
+            <li>Якщо на вході JavaScript object, він намагається побудувати CSV string.</li>
+            <li>Якщо на вході array простих значень, він будує однорядковий CSV string.</li>
+            <li>Якщо на вході array масивів (arrays) або array об'єктів (objects), створюється багаторядковий CSV string.</li>
+        </ul>
+        </dd>
+    </dl>
+    <h3>Деталі</h3>
+    <p>Шаблон колонок (column template) може містити впорядкований список назв колонок. При конвертації CSV у object, назви колонок будуть використовуватися як назви властивостей (property names). Альтернативно, назви колонок можна взяти з першого рядка CSV.</p>
+    <p>Коли вибрано RFC parser, шаблон колонок повинен відповідати RFC4180.</p>
+    <p>При конвертації в CSV шаблон колонок використовується для визначення того, які властивості витягувати з object і в якому порядку.</p>
+    <p>Якщо шаблон колонок порожній, ви можете використовувати простий список властивостей, розділених комами, наданий у <code>msg.columns</code>, щоб визначити, що витягувати і в якому порядку. Якщо жодного з них немає, то всі властивості object виводяться в тому порядку, в якому вони знайдені в першому рядку.</p>
+    <p>Якщо на вході array, то шаблон колонок використовується лише для необов'язкової генерації рядка заголовків колонок.</p>
+    <p>Якщо активовано опцію 'parse numerical values', рядкові числові значення повертатимуться як числа (numbers), наприклад, середнє значення '1,"1.5",2'.</p>
+    <p>Якщо активовано опцію 'include empty strings', порожні рядки повертатимуться в результаті, наприклад, середнє значення '"1","",3'.</p>
+    <p>Якщо активовано опцію 'include null values', значення null повертатимуться в результаті, наприклад, середнє значення '"1",,3'.</p>
+    <p>Вузол може приймати багаточастинний (multi-part) вхід, якщо властивість <code>parts</code> встановлена правильно, наприклад, від вузлів file-in або split.</p>
+    <p>Якщо виводиться кілька повідомлень, вони матимуть встановлену властивість <code>parts</code> і формуватимуть повну послідовність повідомлень.</p>
+    <p>Якщо вузол налаштовано надсилати заголовки колонок лише один раз, то встановлення <code>msg.reset</code> на будь-яке значення змусить вузол надіслати заголовки повторно.</p>
+    <p><b>Примітка:</b> шаблон колонок повинен бути розділений комами - навіть якщо для даних обрано інший роздільник.</p>
+    <p><b>Примітка:</b> у режимі RFC будуть генеруватися помилки (catchable errors), які можна перехопити, для неправильно сформованих CSV заголовків та невалідних вхідних даних payload.</p>
+    <div class="translator-note" style="border-left: 4px solid #17a2b8; padding: 10px; margin: 10px 0; background-color: #f8f9fa;">
+        <strong>Примітка перекладача:</strong> Використання режиму RFC parser (RFC4180) є вкрай рекомендованим для більшості задач, оскільки він коректно обробляє ситуації, коли самі значення CSV містять коми або символи переносу рядка (такі значення зазвичай беруться в подвійні лапки). Властивість <code>parts</code>, про яку згадується в документації, дозволяє легко комбінувати цей вузол із вузлами <code>split</code> та <code>join</code> для ефективної обробки дуже великих CSV-файлів по рядках, не завантажуючи їх цілком у пам'ять.
+    </div>
+</script>

@@ -1,0 +1,41 @@
+<!--
+  Copyright JS Foundation and other contributors, http://js.foundation
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<script type="text/html" data-help-name="catch">
+    <p>Перехоплює помилки (errors), згенеровані вузлами на тій самій вкладці.</p>
+    <h3>Виходи</h3>
+    <dl class="message-properties">
+        <dt>error.message <span class="property-type">string</span></dt>
+        <dd>повідомлення про помилку.</dd>
+        <dt>error.source.id <span class="property-type">string</span></dt>
+        <dd>ідентифікатор вузла, який згенерував помилку.</dd>
+        <dt>error.source.type <span class="property-type">string</span></dt>
+        <dd>тип вузла, який згенерував помилку.</dd>
+        <dt>error.source.name <span class="property-type">string</span></dt>
+        <dd>ім'я (якщо встановлено) вузла, який згенерував помилку.</dd>
+    </dl>
+    <h3>Деталі</h3>
+    <p>Якщо вузол генерує помилку під час обробки повідомлення, flow зазвичай зупиняється (halt). Цей вузол можна використовувати для перехоплення таких помилок та їх обробки за допомогою виділеного flow.</p>
+    <p>За замовчуванням вузол перехоплюватиме помилки, згенеровані будь-яким вузлом на тій самій вкладці. Як альтернативу, його можна націлити на конкретні вузли або налаштувати на перехоплення лише тих помилок, які ще не були перехоплені 'націленим' (targeted) вузлом catch.</p>
+    <p>Коли виникає помилка, всі відповідні вузли catch отримають повідомлення.</p>
+    <p>Якщо помилка виникає всередині subflow (підпотоку), помилка буде оброблена будь-якими вузлами catch всередині subflow. Якщо таких немає, помилка буде поширена вгору на вкладку, де знаходиться екземпляр subflow.</p>
+   <p>Якщо повідомлення вже має властивість <code>error</code>, вона копіюється в <code>_error</code>.</p>
+
+<div class="translator-note" style="border-left: 4px solid #17a2b8; padding: 10px; margin: 10px 0; background-color: #f8f9fa;">
+    <strong>Додаткова інформація щодо вузла catch:</strong>
+    <p>Використання Catch є обов'язковим для побудови надійних (fault-tolerant) систем. Без нього несподівана помилка у вузлі (наприклад, таймут мережі при HTTP запиті) може мовчки перервати ланцюжок виконання. Підключивши Catch, ви можете логувати ці помилки в файл, відправляти сповіщення в месенджер або запускати резервну логіку.</p>
+</div>
+</script>

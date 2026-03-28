@@ -1,0 +1,35 @@
+<!--
+  Copyright JS Foundation and other contributors, http://js.foundation
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<script type="text/html" data-help-name="watch">
+    <p>Спостерігає за каталогом або файлом на наявність змін.</p>
+    <p>Ви можете ввести список каталогів та/або файлів через кому. Вам
+    знадобиться поставити лапки "..." навколо тих, що містять пробіли.</p>
+    <p>В ОС Windows ви повинні використовувати подвійні зворотні слеші \\ у будь-яких іменах каталогів.</p>
+    
+    <div class="translator-note" style="border-left: 4px solid #17a2b8; padding: 10px; margin: 10px 0; background-color: #f8f9fa;">
+        <b>Примітка:</b> Якщо ви спостерігаєте за каталогом, майте на увазі, що вузол спрацьовуватиме на будь-яку зміну <b>всередині</b> нього (включно зі створенням нових файлів або модифікацією існуючих). Корисна практика — використовувати вузол switch після вузла watch, щоб фільтрувати <code>msg.file</code> і реагувати тільки на конкретні розширення файлів (наприклад, тільки <code>.csv</code>).
+    </div>
+
+    <p>Повне ім'я файлу, який фактично змінився, поміщається в <code>msg.payload</code> та <code>msg.filename</code>,
+    тоді як строкова версія списку спостереження (watch list) повертається у <code>msg.topic</code>.</p>
+    <p><code>msg.file</code> містить лише коротке ім'я файлу, який змінився.
+    <code>msg.type</code> містить тип об'єкта, що змінився, зазвичай <i>file</i> або <i>directory</i>,
+    тоді як <code>msg.size</code> містить розмір файлу в байтах.</p>
+    <p>Звичайно, в Linux, <i>все</i> є файлом, і тому за цим можна спостерігати...</p>
+    <p><b>Note: </b>Каталог або файл повинні існувати, щоб за ними можна було спостерігати. Якщо файл
+    або каталог видаляється, за ним можуть більше не спостерігати, навіть якщо він буде створений наново.</p>
+</script>

@@ -1,0 +1,38 @@
+<!--
+  Copyright JS Foundation and other contributors, http://js.foundation
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<script type="text/html" data-help-name="status">
+    <p>Звітує про повідомлення статусу від інших вузлів на тій самій вкладці.</p>
+    <h3>Виходи</h3>
+    <dl class="message-properties">
+        <dt>status.text <span class="property-type">string</span></dt>
+        <dd>текст статусу.</dd>
+        <dt>status.source.type <span class="property-type">string</span></dt>
+        <dd>тип вузла, який повідомив статус.</dd>
+        <dt>status.source.id <span class="property-type">string</span></dt>
+        <dd>ідентифікатор вузла, який повідомив статус.</dd>
+        <dt>status.source.name <span class="property-type">string</span></dt>
+        <dd>ім'я (якщо встановлено) вузла, який повідомив статус.</dd>
+    </dl>
+    <h3>Деталі</h3>
+   <p>Цей вузол не генерує <code>payload</code>.</p>
+   <p>За замовчуванням вузол звітує про статус для всіх вузлів на тій самій вкладці робочої області. Його можна налаштувати на вибіркове звітування про статус для окремих вузлів.</p>
+
+<div class="translator-note" style="border-left: 4px solid #17a2b8; padding: 10px; margin: 10px 0; background-color: #f8f9fa;">
+    <strong>Додаткова інформація щодо вузла status:</strong>
+    <p>Вузол Status дуже зручний для моніторингу стану підключень. Наприклад, вузол MQTT In змінює свій статус на "connected", "disconnected" або "connecting". За допомогою вузла Status ви можете перехопити ці зміни форми/кольору тексту під вузлом і, якщо статус стає "disconnected", надіслати алерт системному адміністратору.</p>
+</div>
+</script>

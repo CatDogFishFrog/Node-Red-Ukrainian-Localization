@@ -1,0 +1,92 @@
+<!--
+  Copyright JS Foundation and other contributors, http://js.foundation
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<script type="text/html" data-help-name="http in">
+    <p>Створює HTTP end-point (кінцеву точку) для розробки веб-сервісів.</p>
+    <h3>Виходи (Outputs)</h3>
+    <dl class="message-properties">
+        <dt>payload</dt>
+        <dd>Для запиту GET містить object з будь-якими параметрами рядка запиту (query string).
+            В інших випадках містить тіло HTTP запиту (body).</dd>
+        <dt>req<span class="property-type">object</span></dt>
+        <dd>Об'єкт HTTP запиту (request). Цей об'єкт містить кілька властивостей, які надають інформацію про запит.
+            <ul>
+             <li><code>body</code> - тіло вхідного запиту. Формат залежатиме від запиту.</li>
+             <li><code>headers</code> - object, що містить заголовки (headers) HTTP запиту.</li>
+             <li><code>query</code> - object, що містить будь-які параметри рядка запиту (query string).</li>
+             <li><code>params</code> - object, що містить будь-які параметри маршруту (route parameters).</li>
+             <li><code>cookies</code> - object, що містить cookies для запиту.</li>
+             <li><code>files</code> - якщо увімкнено у вузлі, object, що містить будь-які файли, завантажені як частина запиту POST.</li>
+            </ul>
+        </dd>
+        <dt>res<span class="property-type">object</span></dt>
+        <dd>Об'єкт HTTP відповіді (response). Цю властивість не слід використовувати безпосередньо;
+            вузол <code>HTTP Response</code> документує, як відповідати на запит.
+            Ця властивість має залишатися прикріпленою до повідомлення, що передається вузлу response.</dd>
+    </dl>
+    <h3>Деталі</h3>
+    <p>Вузол прослуховуватиме налаштований шлях (path) на наявність запитів певного типу.
+       Шлях може бути повністю вказаним, наприклад <code>/user</code>, або включати
+       іменовані параметри, які приймають будь-яке значення, наприклад <code>/user/:name</code>.
+       При використанні іменованих параметрів їх фактичне значення в запиті можна отримати через <code>msg.req.params</code>.</p>
+    <div class="translator-note" style="border-left: 4px solid #17a2b8; padding: 10px; margin: 10px 0; background-color: #f8f9fa;">
+        <strong>Примітка перекладача:</strong> Наприклад, якщо ваш шлях налаштовано як <code>/api/devices/:deviceId</code>, а зовнішній клієнт робить запит на <code>/api/devices/12345</code>, ви зможете отримати значення <code>"12345"</code> у вашому flow, звернувшись до <code>msg.req.params.deviceId</code>.
+    </div>
+    <p>Для запитів, які містять тіло (body), таких як POST або PUT, вміст запиту стає доступним як <code>msg.payload</code>.</p>
+    <p>Якщо content type запиту можна визначити, тіло буде розпарсено (parsed) у відповідний тип. Наприклад, <code>application/json</code> буде перетворено у відповідне представлення об'єкта JavaScript.</p>
+    <p>Вузол можна налаштувати так, щоб він не парсив тіло, у цьому випадку воно буде надано як об'єкт Buffer.</p>
+    <p><b>Зверніть увагу:</b> цей вузол не надсилає жодної відповіді на запит. Flow (потік)
+       повинен містити вузол HTTP Response для завершення запиту.</p>
+</script>
+
+<script type="text/html" data-help-name="http response">
+    <p>Надсилає відповіді на запити, отримані від вузла HTTP Input.</p>
+
+    <h3>Входи (Inputs)</h3>
+    <dl class="message-properties">
+        <dt>payload <span class="property-type">string</span></dt>
+        <dd>Тіло (body) відповіді.</dd>
+        <dt class="optional">statusCode <span class="property-type">number</span></dt>
+        <dd>Якщо встановлено, використовується як код статусу (status code) відповіді. За замовчуванням: 200.</dd>
+        <dt class="optional">headers <span class="property-type">object</span></dt>
+        <dd>Якщо встановлено, надає HTTP заголовки (headers) для включення у відповідь.</dd>
+        <dt class="optional">cookies <span class="property-type">object</span></dt>
+        <dd>Якщо встановлено, може використовуватись для встановлення або видалення cookies.</dd>
+    </dl>
+    <h3>Деталі</h3>
+    <p>Властивості <code>statusCode</code> та <code>headers</code> також можна встановити у самому вузлі. Якщо властивість встановлено у вузлі, її не можна перевизначити відповідною властивістю повідомлення.</p>
+    <h4>Робота з Cookie</h4>
+    <p>Властивість <code>cookies</code> має бути об'єктом пар ім'я/значення.
+    Значенням може бути або string (рядок) для встановлення значення cookie з параметрами за замовчуванням, або об'єкт із опціями.</p>
+    <p>Наступний приклад встановлює дві cookies - одну під назвою <code>name</code> зі значенням <code>nick</code>, іншу під назвою <code>session</code> зі значенням <code>1234</code> та часом закінчення (expiry), встановленим на 15 хвилин.</p>
+    <pre>
+msg.cookies = {
+    name: 'nick',
+    session: {
+        value: '1234',
+        maxAge: 900000
+    }
+}</pre>
+    <p>Допустимі опції включають:</p>
+    <ul>
+    <li><code>domain</code> - (String) доменне ім'я для cookie</li>
+    <li><code>expires</code> - (Date) дата закінчення терміну дії за Гринвічем (GMT). Якщо не вказано або встановлено в 0, створює сесійну (session) cookie</li>
+    <li><code>maxAge</code> - (String) дата закінчення терміну дії відносно поточного часу в мілісекундах</li>
+    <li><code>path</code> - (String) шлях для cookie. За замовчуванням /</li>
+    <li><code>value</code> - (String) значення, яке слід використовувати для cookie</li>
+    </ul>
+    <p>Щоб видалити cookie, встановіть її <code>value</code> у <code>null</code>.</p>
+</script>

@@ -1,0 +1,52 @@
+<!--
+  Copyright JS Foundation and other contributors, http://js.foundation
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<script type="text/html" data-help-name="xml">
+    <p>Конвертує XML string у його представлення у вигляді JavaScript object та навпаки.</p>
+    <h3>Входи (Inputs)</h3>
+    <dl class="message-properties">
+        <dt>payload<span class="property-type">object | string</span></dt>
+        <dd>JavaScript object або XML string.</dd>
+        <dt class="optional">options <span class="property-type">object</span></dt>
+        <dd>Цю необов'язкову властивість можна використовувати для передачі будь-яких опцій, які підтримуються базовою бібліотекою, що використовується для конвертації в XML та з нього. Перегляньте <a href="https://github.com/Leonidas-from-XIV/node-xml2js/blob/master/README.md#options" target="_blank">документацію xml2js</a>
+            для отримання додаткової інформації.</dd>
+    </dl>
+    <h3>Виходи (Outputs)</h3>
+    <dl class="message-properties">
+        <dt>payload<span class="property-type">object | string</span></dt>
+        <dd>
+            <ul>
+                <li>Якщо на вході string, він намагається розпарсити його як XML і створює JavaScript object.</li>
+                <li>Якщо на вході JavaScript object, він намагається побудувати XML string.</li>
+            </ul>
+        </dd>
+    </dl>
+    <h3>Деталі</h3>
+    <p>При конвертації між XML та object будь-які XML атрибути за замовчуванням додаються як властивість з назвою <code>$</code>. Будь-який текстовий вміст додається як властивість з назвою <code>_</code>. Ці назви властивостей можна вказати в конфігурації вузла.</p>
+    <p>Наприклад, наступний XML буде конвертовано так, як показано нижче:</p>
+    <pre>&lt;p class="tag"&gt;Hello World&lt;/p&gt;</pre>
+    <pre>{
+  "p": {
+    "$": {
+      "class": "tag"
+    },
+    "_": "Hello World"
+  }
+}</pre>
+    <div class="translator-note" style="border-left: 4px solid #17a2b8; padding: 10px; margin: 10px 0; background-color: #f8f9fa;">
+        <strong>Примітка перекладача:</strong> Особливість структури з ключами <code>$</code> та <code>_</code> часто викликає плутанину. Це потрібно для того, щоб зберегти в JavaScript об'єкті і атрибути HTML/XML тегу, і його внутрішній текст одночасно. Якщо вам потрібно побудувати XML з об'єкта, обов'язково дотримуйтесь цієї самої структури. Крім того, майте на увазі, що бібліотека xml2js (яка тут використовується) часто конвертує дочірні вузли в масиви (arrays), навіть якщо дочірній елемент лише один. Це можна змінити, передавши відповідні <code>options</code>.
+    </div>
+</script>

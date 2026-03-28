@@ -1,0 +1,30 @@
+<!--
+  Copyright JS Foundation and other contributors, http://js.foundation
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<script type="text/html" data-help-name="debug">
+    <p>Відображає вибрані властивості повідомлення на бічній панелі налагодження (debug sidebar) та, опціонально, у журналі середовища виконання (runtime log). За замовчуванням він відображає <code>msg.payload</code>, але його можна налаштувати на відображення будь-якої властивості, всього повідомлення або результату виразу JSONata.</p>
+    <h3>Деталі</h3>
+    <p>Бічна панель налагодження надає структуроване подання надісланих до неї повідомлень, що полегшує розуміння їхньої структури.</p>
+    <p>Об'єкти та масиви JavaScript можна згортати та розгортати за потреби. Об'єкти типу Buffer можна відображати як сирі дані (raw data) або як рядок, якщо це можливо.</p>
+    <p>Поруч із кожним повідомленням на бічній панелі налагодження міститься інформація про час отримання повідомлення, вузол, який його надіслав, і тип повідомлення. Натискання на ідентифікатор вузла-джерела (source node id) покаже цей вузол у робочій області (workspace).</p>
+    <p>Кнопку на вузлі можна використовувати для увімкнення або вимкнення його виводу. Рекомендується вимикати або видаляти будь-які вузли Debug, які не використовуються.</p>
+    <p>Вузол також можна налаштувати на відправку всіх повідомлень до журналу середовища виконання або на відправку короткого тексту (32 символи) у статус під вузлом debug.</p>
+
+<div class="translator-note" style="border-left: 4px solid #17a2b8; padding: 10px; margin: 10px 0; background-color: #f8f9fa;">
+    <strong>Додаткова інформація щодо вузла debug:</strong>
+    <p>Залишення великої кількості активних вузлів Debug (особливо тих, що виводять повний об'єкт <code>msg</code> або великі масиви даних) може суттєво знизити продуктивність Node-RED через навантаження на підсистему логування та інтерфейс користувача. Обов'язково деактивуйте їх у виробничому середовищі (production).</p>
+</div>
+</script>

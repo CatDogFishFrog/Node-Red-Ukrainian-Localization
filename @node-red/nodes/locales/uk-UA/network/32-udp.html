@@ -1,0 +1,31 @@
+<!--
+  Copyright JS Foundation and other contributors, http://js.foundation
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<script type="text/html" data-help-name="udp in">
+    <p>Вхідний UDP вузол, який генерує <code>msg.payload</code>, що містить Buffer, string або рядок у кодуванні base64. Підтримує multicast.</p>
+    <p>Він також надає <code>msg.ip</code> та <code>msg.port</code>, що встановлюються на ip адресу та порт, з яких було отримано повідомлення.</p>
+    <div class="translator-note" style="border-left: 4px solid #17a2b8; padding: 10px; margin: 10px 0; background-color: #f8f9fa;">
+        <strong>Примітка перекладача:</strong> На відміну від TCP, протокол UDP не встановлює з'єднання. Він просто приймає окремі пакети (датаграми) даних. Тому для UDP завжди доступна інформація про відправника (<code>msg.ip</code> та <code>msg.port</code>).
+    </div>
+    <p><b>Зверніть увагу</b>: На деяких системах вам може знадобитися доступ з правами root або адміністратора для використання портів нижче 1024 та/або широкомовної розсилки (broadcast).</p>
+</script>
+
+<script type="text/html" data-help-name="udp out">
+    <p>Цей вузол надсилає <code>msg.payload</code> до визначеного UDP хоста та порту. Підтримує multicast.</p>
+    <p>Ви також можете використовувати <code>msg.ip</code> та <code>msg.port</code> для встановлення значень призначення (destination), але статично налаштовані значення мають пріоритет.</p>
+    <p>Якщо ви вибираєте broadcast, або встановіть адресу локальної широкомовної ip адреси, або спробуйте 255.255.255.255, що є глобальною широкомовною адресою.</p>
+    <p><b>Зверніть увагу</b>: На деяких системах вам може знадобитися мати права root для використання портів нижче 1024 та/або широкомовної розсилки.</p>
+</script>

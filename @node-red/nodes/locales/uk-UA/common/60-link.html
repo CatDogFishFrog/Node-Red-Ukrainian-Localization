@@ -1,0 +1,61 @@
+<!--
+  Copyright JS Foundation and other contributors, http://js.foundation
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<script type="text/html" data-help-name="link in">
+    <p>Створює віртуальні дроти між flow.</p>
+    <h3>Деталі</h3>
+    <p>Цей вузол можна підключити до будь-якого вузла <code>link out</code>, який існує на будь-якій вкладці. Після підключення вони поводяться так, ніби вони з'єднані дротом.</p>
+    <p>Дроти між вузлами link відображаються лише тоді, коли вибрано вузол link. Якщо є будь-які дроти до інших вкладок, відображається віртуальний вузол, по якому можна клікнути для переходу на відповідну вкладку.</p>
+    <p><b>Примітка: </b>Посилання (Links) не можна створювати для входу або виходу з subflow.</p>
+</script>
+
+<script type="text/html" data-help-name="link out">
+    <p>Створює віртуальні дроти між flow.</p>
+    <h3>Деталі</h3>
+    <p>Цей вузол можна налаштувати на відправку повідомлень всім вузлам <code>link in</code>, до яких він підключений, або на відправку відповіді назад до вузла <code>link call</code>, який ініціював flow.</p>
+    <p>У режимі 'send to all' (відправити всім) дроти між вузлами link відображаються лише тоді, коли вузол вибрано. Якщо є будь-які дроти до інших вкладок, відображається віртуальний вузол, по якому можна клікнути для переходу на відповідну вкладку.</p>
+    <p><b>Примітка: </b>Посилання (Links) не можна створювати для входу або виходу з subflow.</p>
+
+<div class="translator-note" style="border-left: 4px solid #17a2b8; padding: 10px; margin: 10px 0; background-color: #f8f9fa;">
+    <strong>Додаткова інформація щодо вузлів link in та link out:</strong>
+    <p>Використання Link вузлів є найкращою практикою для підтримки чистоти робочого простору. Замість того, щоб тягнути довгі лінії через весь екран від одного кінця логіки до іншого, ви можете розірвати лінію за допомогою пари Link Out -> Link In. Це також єдиний спосіб передати повідомлення з однієї вкладки (Tab) на іншу без використання глобальних змінних чи мережевих протоколів.</p>
+</div>
+</script>
+
+<script type="text/html" data-help-name="link call">
+    <p>Викликає flow, який починається з вузла <code>link in</code>, і передає відповідь.</p>
+    <h3>Входи</h3>
+    <dl class="message-properties">
+      <dt class="optional">target<span class="property-type">string</span></dt>
+      <dd>Коли опцію <b>Link Type</b> встановлено на "Dynamic target" (Динамічна ціль), встановіть <code>msg.target</code> на ім'я вузла <code>link in</code>, який ви бажаєте викликати.</dd>
+    </dl>
+    <h3>Деталі</h3>
+    <p>Цей вузол можна підключити до вузла <code>link in</code>, який існує на будь-якій вкладці. Flow, підключений до цього вузла, повинен закінчуватися вузлом <code>link out</code>, налаштованим у режимі 'return' (повернення).</p>
+    <p>Коли цей вузол отримує повідомлення, воно передається до підключеного вузла <code>link in</code>. Потім він чекає на відповідь, яку згодом відправляє далі.</p>
+    <p>Якщо відповідь не отримана протягом налаштованого таймауту (за замовчуванням 30 секунд), вузол зареєструє помилку, яку можна перехопити за допомогою вузла <code>catch</code>.</p>
+    <p>Коли опцію <b>Link Type</b> встановлено на "Dynamic target", <code>msg.target</code> можна використовувати для виклику <code>link in</code> за іменем або ідентифікатором (id). </p>
+    <ul>
+      <li>Якщо існує вузол <code>link in</code> з таким самим ідентифікатором, його буде викликано</li>
+      <li>Якщо існує два або більше вузлів <code>link in</code> з однаковим іменем, буде згенеровано помилку</li>
+      <li>Вузол <code>link call</code> не може викликати вузол <code>link in</code> всередині subflow</li>
+    </ul>
+    <p>Flow, підключений до цього вузла, повинен закінчуватися вузлом <code>link out</code>, налаштованим у режимі 'return' (повернення).</p>
+
+<div class="translator-note" style="border-left: 4px solid #17a2b8; padding: 10px; margin: 10px 0; background-color: #f8f9fa;">
+    <strong>Додаткова інформація щодо вузла link call:</strong>
+    <p>Вузол <code>link call</code> дозволяє створювати архітектуру, подібну до виклику функцій (RPC) у традиційному програмуванні. Ви передаєте дані у підпотік, він обробляє їх і гарантовано повертає результат назад у той самий ланцюжок виконання. Це робить логіку набагато структурованішою та дозволяє повторно використовувати цілі ділянки flow.</p>
+</div>
+</script>

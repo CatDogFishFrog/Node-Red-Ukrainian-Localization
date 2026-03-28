@@ -1,0 +1,82 @@
+<!--
+  Copyright JS Foundation and other contributors, http://js.foundation
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<script type="text/html" data-help-name="http request">
+    <p>Надсилає HTTP запити та повертає відповідь.</p>
+
+    <h3>Входи (Inputs)</h3>
+    <dl class="message-properties">
+        <dt class="optional">url <span class="property-type">string</span></dt>
+        <dd>Якщо не налаштовано у вузлі, ця необов'язкова властивість встановлює url запиту.</dd>
+        <dt class="optional">method <span class="property-type">string</span></dt>
+        <dd>Якщо не налаштовано у вузлі, ця необов'язкова властивість встановлює HTTP метод запиту.
+            Має бути одним із <code>GET</code>, <code>PUT</code>, <code>POST</code>, <code>PATCH</code> або <code>DELETE</code>.</dd>
+        <dt class="optional">headers <span class="property-type">object</span></dt>
+        <dd>Встановлює HTTP заголовки запиту. ПРИМІТКА: Будь-які заголовки, встановлені в конфігурації вузла, перезапишуть будь-які співпадаючі заголовки в <code>msg.headers</code>.</dd>
+        <dt class="optional">cookies <span class="property-type">object</span></dt>
+        <dd>Якщо встановлено, може використовуватись для відправки cookies із запитом.</dd>
+        <dt class="optional">payload</dt>
+        <dd>Надсилається як тіло (body) запиту.</dd>
+        <dt class="optional">rejectUnauthorized</dt>
+        <dd>Якщо встановлено як <code>false</code>, дозволяє робити запити до https сайтів, які використовують самопідписані сертифікати (self signed certificates).</dd>
+        <dt class="optional">followRedirects</dt>
+        <dd>Якщо встановлено як <code>false</code>, запобігає переходам за перенаправленнями (Redirect, HTTP 301). За замовчуванням <code>true</code>.</dd>
+        <dt class="optional">requestTimeout</dt>
+        <dd>Якщо встановлено додатне число в мілісекундах, це перевизначить глобально встановлений параметр <code>httpRequestTimeout</code>.</dd>
+    </dl>
+    <h3>Виходи (Outputs)</h3>
+    <dl class="message-properties">
+        <dt>payload <span class="property-type">string | object | buffer</span></dt>
+        <dd>Тіло відповіді. Вузол можна налаштувати на повернення тіла як string (рядок), на спробу розпарсити його як JSON рядок, або залишити як бінарний buffer.</dd>
+        <dt>statusCode <span class="property-type">number</span></dt>
+        <dd>Код статусу (status code) відповіді, або код помилки, якщо запит не вдалося завершити.</dd>
+        <dt>headers <span class="property-type">object</span></dt>
+        <dd>Об'єкт, що містить заголовки відповіді.</dd>
+        <dt>responseUrl <span class="property-type">string</span></dt>
+        <dd>Якщо під час обробки запиту відбулися будь-які перенаправлення (redirects), ця властивість є кінцевим url перенаправлення. Інакше, url оригінального запиту.</dd>
+        <dt>responseCookies <span class="property-type">object</span></dt>
+        <dd>Якщо відповідь містить cookies, ця властивість є об'єктом пар ім'я/значення для кожної cookie.</dd>
+        <dt>redirectList <span class="property-type">array</span></dt>
+        <dd>Якщо запит був перенаправлений один або кілька разів, накопичена інформація буде додана до цієї властивості. `location` - це наступне місце призначення перенаправлення. `cookies` - це cookies, повернуті з джерела перенаправлення.</dd>
+    </dl>
+    <h3>Деталі</h3>
+    <p>При налаштуванні у вузлі, властивість URL може містити теги у стилі <a href="http://mustache.github.io/mustache.5.html" target="_blank">mustache</a>. Вони дозволяють конструювати url, використовуючи значення вхідного повідомлення. Наприклад, якщо url встановлено як <code>example.com/{{{topic}}}</code>, у нього буде автоматично вставлено значення <code>msg.topic</code>.
+    Використання <code>{{{...}}}</code> (потрійних фігурних дужок) запобігає екрануванню символів на зразок / & тощо (запобігає url-кодуванню).</p>
+    <div class="translator-note" style="border-left: 4px solid #17a2b8; padding: 10px; margin: 10px 0; background-color: #f8f9fa;">
+        <strong>Примітка перекладача:</strong> Це дуже важлива деталь. Якщо <code>msg.topic</code> містить шлях <code>my/path/to/api</code>, використання стандартного mustache <code>{{topic}}</code> перетворить скісні риски у <code>my%2Fpath%2Fto%2Fapi</code>, що зламає запит. Завжди використовуйте <code>{{{topic}}}</code> для URL-шляхів.
+    </div>
+    <p>Вузол за потреби може автоматично кодувати <code>msg.payload</code> як параметри рядка запиту (query string) для запиту GET, у такому випадку <code>msg.payload</code> має бути об'єктом (Object).</p>
+    <p><b>Зверніть увагу</b>: Якщо вузол працює за proxy, слід встановити стандартну змінну середовища <code>http_proxy=...</code> та перезапустити Node-RED, або використовувати Proxy Configuration. Якщо було встановлено Proxy Configuration, ці налаштування мають пріоритет над змінною середовища.</p>
+    <h4>Використання декількох вузлів HTTP Request</h4>
+    <p>Для того, щоб використовувати більше одного такого вузла в одному flow, слід бути обережним із властивістю <code>msg.headers</code>. Перший вузол встановить цю властивість із заголовками своєї відповіді. Наступний вузол потім використає ці заголовки для свого запиту - зазвичай це не те, що вам потрібно. Якщо залишити властивість <code>msg.headers</code> без змін між вузлами, вона буде проігнорована другим вузлом. Щоб встановити власні заголовки, <code>msg.headers</code> спочатку потрібно видалити або скинути на порожній об'єкт: <code>{}</code>.</p>
+    <h4>Робота з Cookie</h4>
+    <p>Властивість <code>cookies</code>, передана вузлу, має бути об'єктом пар ім'я/значення. Значенням може бути або string (рядок), щоб встановити значення cookie, або об'єкт з єдиною властивістю <code>value</code>.</p>
+    <p>Будь-які cookies, повернуті запитом, передаються назад у властивості <code>responseCookies</code>.</p>
+    <h4>Обробка Content type</h4>
+    <p>Якщо <code>msg.payload</code> є Object, вузол автоматично встановить content type запиту як <code>application/json</code> і відповідним чином закодує тіло.</p>
+    <p>Щоб закодувати запит як дані форми (form data), <code>msg.headers["content-type"]</code> слід встановити як <code>application/x-www-form-urlencoded</code>.</p>
+    <h4>Завантаження файлів (File Upload)</h4>
+    <p>Щоб виконати завантаження файлу, <code>msg.headers["content-type"]</code> слід встановити як <code>multipart/form-data</code>, а <code>msg.payload</code>, переданий вузлу, повинен бути об'єктом з наступною структурою:</p>
+    <pre><code>{
+    "KEY": {
+        "value": FILE_CONTENTS,
+        "options": {
+            "filename": "FILENAME"
+        }
+    }
+}</code></pre>
+    <p>Значення <code>KEY</code>, <code>FILE_CONTENTS</code> та <code>FILENAME</code> слід встановити у відповідні значення.</p>
+</script>

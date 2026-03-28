@@ -1,0 +1,38 @@
+<!--
+  Copyright JS Foundation and other contributors, http://js.foundation
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<script type="text/html" data-help-name="change">
+    <p>Встановлює, змінює, видаляє або переміщує властивості повідомлення, контексту flow або глобального контексту.</p>
+    <p>У вузлі можна вказати кілька правил, які будуть застосовані у тому порядку, в якому вони визначені.</p>
+    <h3>Деталі</h3>
+    <p>Доступні наступні операції:</p>
+    <dl class="message-properties">
+    <dt>Set</dt>
+    <dd>встановити властивість. Значення може бути різних типів або може бути взято з існуючого повідомлення чи властивості контексту.</dd>
+    <dt>Change</dt>
+    <dd>пошук та заміна частин властивості. Якщо увімкнено регулярні вирази, властивість "replace with" (замінити на) може включати групи захоплення (capture groups), наприклад <code>$1</code>. Заміна змінить тип лише у випадку повного співпадіння.</dd>
+    <dt>Delete</dt>
+    <dd>видалити властивість.</dd>
+    <dt>Move</dt>
+    <dd>перемістити або перейменувати властивість.</dd>
+    </dl>
+    <p>Тип "expression" використовує мову запитів та виразів <a href="http://jsonata.org/" target="_new">JSONata</a>.</p>
+
+    <div class="translator-note" style="border-left: 4px solid #17a2b8; padding: 10px; margin: 10px 0; background-color: #f8f9fa;">
+        <strong>Додаткова інформація щодо вузла change:</strong>
+        <p>Це один з найпотужніших вузлів для маніпуляції даними. Завжди віддавайте перевагу вузлу change над вузлом function для операцій присвоєння змінних або видалення даних з <code>msg</code>, оскільки change Node обробляється рушієм швидше і не вимагає ініціалізації середовища виконання JavaScript (V8).</p>
+    </div>
+</script>

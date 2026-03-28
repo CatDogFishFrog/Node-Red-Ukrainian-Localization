@@ -1,0 +1,43 @@
+<!--
+  Copyright JS Foundation and other contributors, http://js.foundation
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<script type="text/html" data-help-name="switch">
+    <p>Маршрутизує повідомлення на основі значень їх властивостей або позиції в послідовності.</p>
+    <h3>Деталі</h3>
+    <p>Коли надходить повідомлення, вузол оцінює кожне з визначених правил і пересилає повідомлення на відповідні виходи будь-яких правил, що співпали.</p>
+    <p>Опціонально, вузол можна налаштувати на припинення оцінки правил після того, як буде знайдено перше співпадіння.</p>
+    <p>Правила можуть оцінюватися щодо окремої властивості повідомлення, властивості контексту flow або global, змінної середовища або результату виразу JSONata.</p>
+    <h4>Правила</h4>
+    <p>Існує чотири типи правил:</p>
+    <ol>
+        <li>Правила <b>Value</b> оцінюються щодо налаштованої властивості</li>
+        <li>Правила <b>Sequence</b> можна використовувати для послідовностей повідомлень, таких як ті, що генеруються вузлом Split</li>
+        <li>Може бути надано <b>Expression</b> (вираз) JSONata, який буде оцінюватися щодо всього повідомлення і співпаде, якщо вираз поверне значення true.</li>
+        <li>Правило <b>Otherwise</b> (в іншому випадку) можна використовувати для співпадіння, якщо жодне з попередніх правил не співпало.</li>
+    </ol>
+    <h4>Примітки</h4>
+    <p>Правила <code>is true/false</code> та <code>is null</code> виконують строгі порівняння з цими типами. Вони не конвертують типи між собою.</p>
+    <p>Правила <code>is empty</code> та <code>is not empty</code> можна використовувати для перевірки довжини рядків (Strings), масивів (Arrays) та буферів (Buffers), або кількості властивостей, які має об'єкт. Жодне з цих правил не спрацює, якщо перевіряєма властивість має значення <code>boolean</code>, <code>null</code> або <code>undefined</code>.</p>
+    <h4>Обробка послідовностей повідомлень</h4>
+    <p>За замовчуванням вузол не модифікує властивість <code>msg.parts</code> повідомлень, які є частиною послідовності.</p>
+    <p>Опцію <b>recreate message sequences</b> (перестворювати послідовності повідомлень) можна увімкнути для генерації нових послідовностей повідомлень для кожного правила, що співпало. У цьому режимі вузол буферизує всю вхідну послідовність перед відправкою нових послідовностей далі. Параметр середовища виконання <code>nodeMessageBufferMaxLength</code> можна використовувати для обмеження кількості повідомлень, які буферизують вузли.</p>
+
+    <div class="translator-note" style="border-left: 4px solid #17a2b8; padding: 10px; margin: 10px 0; background-color: #f8f9fa;">
+        <strong>Додаткова інформація щодо вузла switch:</strong>
+        <p>Зупинка перевірки після першого співпадіння (checking "stopping after first match") дозволяє значно оптимізувати продуктивність flow, особливо якщо у вас велика кількість правил.</p>
+        <p>Використання виразів <b>JSONata</b> дозволяє робити надзвичайно складні перевірки кількох властивостей одночасно без необхідності писати код у вузлі function.</p>
+    </div>
+</script>

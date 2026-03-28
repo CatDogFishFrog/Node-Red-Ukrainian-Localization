@@ -1,0 +1,46 @@
+<!--
+  Copyright JS Foundation and other contributors, http://js.foundation
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<script type="text/html" data-help-name="sort">
+    <p>Функція, яка сортує властивість повідомлення або послідовність повідомлень.</p>
+    <p>При налаштуванні на сортування властивості повідомлення, вузол сортує дані масиву, на які вказує задана властивість повідомлення.</p>
+    <p>При налаштуванні на сортування послідовності повідомлень, він змінить порядок повідомлень.</p>
+    <p>Порядок сортування може бути:</p>
+    <ul>
+        <li><b>ascending</b> (за зростанням),</li>
+        <li><b>descending</b> (за спаданням).</li>
+    </ul>
+    <p>Для чисел числове впорядкування можна вказати за допомогою прапорця.</p>
+    <p>Ключем сортування може бути значення елемента або вираз JSONata для сортування значення властивості, або властивість повідомлення чи вираз JSONata для сортування послідовності повідомлень.<p>
+    
+    <div class="translator-note" style="border-left: 4px solid #17a2b8; padding: 10px; margin: 10px 0; background-color: #f8f9fa;">
+        <b>Примітка:</b> Вирази JSONata — це потужний спосіб створювати складні правила сортування. Наприклад, якщо у вас масив об'єктів з користувачами, ви можете вказати JSONata вираз <code>payload.age</code>, щоб відсортувати об'єкти суто за віком користувачів.
+    </div>
+
+    <p>При сортуванні послідовності повідомлень вузол sort покладається на те, що отримані повідомлення мають встановлену властивість <code>msg.parts</code>. Вузол split генерує цю властивість, але її можна створити вручну. Вона має наступні атрибути:</p>
+    <p>
+        <ul>
+            <li><code>id</code> - ідентифікатор групи повідомлень</li>
+            <li><code>index</code> - позиція в межах групи</li>
+            <li><code>count</code> - загальна кількість повідомлень у групі</li>
+        </ul>
+    </p>
+    <p><b>Note:</b> Цей вузол внутрішньо зберігає повідомлення для своєї роботи. Щоб запобігти несподіваному споживанню пам'яті, можна вказати максимальну кількість повідомлень, що зберігаються. За замовчуванням обмеження на кількість повідомлень немає.
+        <ul>
+            <li>Властивість <code>nodeMessageBufferMaxLength</code>, встановлена в <b>settings.js</b>.</li>
+        </ul>
+    </p>
+</script>

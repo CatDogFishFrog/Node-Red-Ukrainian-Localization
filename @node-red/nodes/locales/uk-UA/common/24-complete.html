@@ -1,0 +1,29 @@
+<!--
+  Copyright JS Foundation and other contributors, http://js.foundation
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<script type="text/html" data-help-name="complete">
+    <p>Запускає flow, коли інший вузол завершує обробку повідомлення.</p>
+    <h3>Деталі</h3>
+    <p>Якщо вузол повідомляє середовищу виконання про те, що він завершив обробку повідомлення, цей вузол можна використовувати для запуску другого flow.</p>
+    <p>Наприклад, це можна використовувати поруч із вузлом, який не має вихідного порту, таким як вузол відправки Email, для продовження flow.</p>
+    <p>Цей вузол має бути налаштований на обробку події для вибраних вузлів у flow. На відміну від вузла Catch, він не надає режиму 'handle all' (обробляти всі), який автоматично застосовується до всіх вузлів у flow.</p>
+    <p>Не всі вузли запускатимуть цю подію - це залежатиме від того, чи були вони реалізовані з підтримкою цієї функції, яка була представлена в Node-RED 1.0.</p>
+
+<div class="translator-note" style="border-left: 4px solid #17a2b8; padding: 10px; margin: 10px 0; background-color: #f8f9fa;">
+    <strong>Додаткова інформація щодо вузла complete:</strong>
+    <p>Вузол Complete ідеально підходить для розв'язання проблеми "spaghetti-коду" у візуальному програмуванні. Ви можете розділити великий логічний ланцюжок на ізольовані блоки. Коли перший блок закінчує свою асинхронну роботу (наприклад, запис у базу даних через вузол без виходу), вузол Complete автоматично перехопить сигнал завершення і продовжить логіку далі.</p>
+</div>
+</script>

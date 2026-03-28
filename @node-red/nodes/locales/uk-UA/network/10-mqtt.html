@@ -1,0 +1,154 @@
+<!--
+  Copyright JS Foundation and other contributors, http://js.foundation
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+  http://www.apache.org/licenses/LICENSE-2.0
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<script type="text/html" data-help-name="mqtt in">
+<p>Підключається до MQTT broker та підписується на повідомлення із зазначеного topic.</p>
+    <h3>Виходи (Outputs)</h3>
+    <dl class="message-properties">
+       <dt>payload <span class="property-type">string | buffer</span></dt>
+       <dd>string (рядок), якщо не визначено як бінарний buffer.</dd>
+       <dt>topic <span class="property-type">string</span></dt>
+       <dd>MQTT topic, використовує / як роздільник ієрархії.</dd>
+       <dt>qos <span class="property-type">number</span> </dt>
+       <dd>0, відправити і забути (fire and forget) - 1, щонайменше один раз (at least once) - 2, строго один раз (once and once only).</dd>
+       <dt>retain <span class="property-type">boolean</span></dt>
+       <dd>true вказує на те, що повідомлення було збережено (retained) брокером і може бути старим.</dd>
+
+       <dt class="optional">responseTopic <span class="property-type">string</span></dt>
+       <dd><b>MQTTv5</b>: MQTT response topic для повідомлення</dd>
+       <dt class="optional">correlationData <span class="property-type">Buffer</span></dt>
+       <dd><b>MQTTv5</b>: correlation data (дані кореляції) для повідомлення</dd>
+       <dt class="optional">contentType <span class="property-type">string</span></dt>
+       <dd><b>MQTTv5</b>: content-type для payload</dd>
+       <dt class="optional">userProperties <span class="property-type">object</span></dt>
+       <dd><b>MQTTv5</b>: будь-які користувацькі властивості (user properties) повідомлення</dd>
+       <dt class="optional">messageExpiryInterval <span class="property-type">number</span></dt>
+       <dd><b>MQTTv5</b>: час закінчення терміну дії повідомлення у секундах (expiry time)</dd>
+    </dl>
+    <h3>Деталі</h3>
+    <p>Topic для підписки може включати MQTT wildcards (символи підстановки): + для одного рівня, # для декількох рівнів.</p>
+    <div class="translator-note" style="border-left: 4px solid #17a2b8; padding: 10px; margin: 10px 0; background-color: #f8f9fa;">
+        <strong>Примітка перекладача щодо Wildcards:</strong> 
+        <ul>
+            <li><code>+</code> (плюс) замінює рівно один рівень ієрархії. Наприклад, підписка на <code>sensors/+/temperature</code> отримає дані з <code>sensors/room1/temperature</code> та <code>sensors/room2/temperature</code>, але не з <code>sensors/room1/floor1/temperature</code>.</li>
+            <li><code>#</code> (хеш) замінює всі наступні рівні до кінця. Наприклад, <code>sensors/#</code> отримає абсолютно всі повідомлення, що починаються з <code>sensors/</code>. Символ <code>#</code> може бути лише в кінці topic.</li>
+        </ul>
+    </div>
+    <p>Цей вузол вимагає налаштування підключення до MQTT broker. Це налаштовується шляхом натискання на іконку олівця.</p>
+    <p>Декілька MQTT вузлів (in або out) можуть спільно використовувати одне підключення до broker, якщо це необхідно.</p>
+    <h4>Динамічна підписка (Dynamic Subscription)</h4>
+    <p>Вузол можна налаштувати для динамічного керування MQTT з'єднанням та його підписками. Якщо цю опцію ввімкнено, вузол матиме вхід і ним можна буде керувати, передаючи йому повідомлення.</p>
+    <h3>Входи (Inputs)</h3>
+    <p>Вони застосовуються лише тоді, коли вузол налаштовано на динамічні підписки.</p>
+    <dl class="message-properties">
+       <dt>action <span class="property-type">string</span></dt>
+       <dd>назва дії, яку має виконати вузол. Доступні дії: <code>"connect"</code>,
+       <code>"disconnect"</code>, <code>"getSubscriptions"</code>, <code>"subscribe"</code> та 
+       <code>"unsubscribe"</code>.</dd>
+       <dt class="optional">topic <span class="property-type">string|object|array</span></dt>
+       <dd>Для дій <code>"subscribe"</code> та <code>"unsubscribe"</code> ця властивість надає topic. Її можна встановити як:<ul>
+           <li>String (рядок), що містить фільтр topic</li>
+           <li>Object (об'єкт), що містить властивості <code>topic</code> та <code>qos</code></li>
+           <li>Array (масив) рядків або об'єктів для обробки декількох topic одночасно</li>
+            </ul>
+        </dd>
+       <dt class="optional">broker <span class="property-type">broker</span> </dt>
+       <dd>Для дії <code>"connect"</code> ця властивість може перевизначати будь-які індивідуальні налаштування конфігурації broker, включаючи: <ul>
+               <li><code>broker</code></li>
+               <li><code>port</code></li>
+               <li><code>url</code> - перевизначає broker/port, щоб надати повний url підключення</li>
+               <li><code>username</code></li>
+               <li><code>password</code></li>
+           </ul>
+           <p>Якщо цю властивість встановлено і broker вже підключено, буде зареєстровано помилку, якщо тільки не встановлено властивість <code>force</code> - у цьому випадку він відключиться від broker, застосує нові налаштування і перепідключиться.</p>
+       </dd>
+    </dl>
+</script>
+
+<script type="text/html" data-help-name="mqtt out">
+    <p>Підключається до MQTT broker та публікує повідомлення.</p>
+    <h3>Входи (Inputs)</h3>
+    <dl class="message-properties">
+       <dt>payload <span class="property-type">string | buffer</span></dt>
+       <dd> payload для публікації. Якщо ця властивість не встановлена, повідомлення не буде надіслано. Щоб надіслати порожнє повідомлення, встановіть для цієї властивості порожній String.</dd>
+       <dt class="optional">topic <span class="property-type">string</span></dt>
+       <dd> MQTT topic для публікації.</dd>
+       <dt class="optional">qos <span class="property-type">number</span></dt>
+       <dd>0, відправити і забути - 1, щонайменше один раз - 2, строго один раз. За замовчуванням 0.</dd>
+       <dt class="optional">retain <span class="property-type">boolean</span></dt>
+       <dd>встановіть у true, щоб зберегти (retain) повідомлення на broker. За замовчуванням false.</dd>
+       <dt class="optional">responseTopic <span class="property-type">string</span></dt>
+       <dd><b>MQTTv5</b>: MQTT response topic для повідомлення</dd>
+       <dt class="optional">correlationData <span class="property-type">Buffer</span></dt>
+       <dd><b>MQTTv5</b>: correlation data (дані кореляції) для повідомлення</dd>
+       <dt class="optional">contentType <span class="property-type">string</span></dt>
+       <dd><b>MQTTv5</b>: content-type для payload</dd>
+       <dt class="optional">userProperties <span class="property-type">object</span></dt>
+       <dd><b>MQTTv5</b>: будь-які користувацькі властивості (user properties) повідомлення</dd>
+       <dt class="optional">messageExpiryInterval <span class="property-type">number</span></dt>
+       <dd><b>MQTTv5</b>: час закінчення терміну дії повідомлення у секундах (expiry time)</dd>
+       <dt class="optional">topicAlias <span class="property-type">number</span></dt>
+       <dd><b>MQTTv5</b>: MQTT topic alias (псевдонім), який слід використовувати</dd>
+    </dl>
+    <h3>Деталі</h3>
+    <p><code>msg.payload</code> використовується як payload опублікованого повідомлення.
+    Якщо він містить Object, його буде конвертовано у JSON рядок перед відправкою.
+    Якщо він містить бінарний Buffer, повідомлення буде опубліковано як є.</p>
+    <p>Topic, що використовується, можна налаштувати у вузлі або, якщо залишити порожнім, його можна задати через <code>msg.topic</code>.</p>
+    <p>Аналогічно, значення QoS та retain можна налаштувати у вузлі або, якщо залишити порожніми, задати через <code>msg.qos</code> та <code>msg.retain</code> відповідно. Щоб видалити раніше збережений (retained) topic з broker, надішліть порожнє повідомлення в цей topic із встановленим прапорцем retain.</p>
+    <div class="translator-note" style="border-left: 4px solid #17a2b8; padding: 10px; margin: 10px 0; background-color: #f8f9fa;">
+        <strong>Примітка перекладача щодо Retain:</strong> Встановлення <code>msg.retain = true</code> є надзвичайно корисним для датчиків, які рідко оновлюють свій стан (наприклад, датчик відкриття дверей). Брокер збереже останнє таке повідомлення, і будь-який новий клієнт, щойно підписавшись на цей topic, миттєво отримає поточний стан, не чекаючи наступного оновлення від датчика.
+    </div>
+    <p>Цей вузол вимагає налаштування підключення до MQTT broker. Це налаштовується шляхом натискання на іконку олівця.</p>
+    <p>Декілька MQTT вузлів (in або out) можуть спільно використовувати одне підключення до broker, якщо це необхідно.</p>
+
+    <h4>Динамічне керування (Dynamic Control)</h4>
+    <p>З'єднання, яке спільно використовується вузлом, можна контролювати динамічно. Якщо вузол отримує одне з наступних керуючих повідомлень, він не буде публікувати payload повідомлення.</p>
+    <h3>Входи (Inputs)</h3>
+    <dl class="message-properties">
+       <dt>action <span class="property-type">string</span></dt>
+       <dd>назва дії, яку має виконати вузол. Доступні дії: <code>"connect"</code> 
+       та <code>"disconnect"</code>.</dd>
+       <dt class="optional">broker <span class="property-type">broker</span> </dt>
+       <dd>Для дії <code>"connect"</code> ця властивість може перевизначати будь-які індивідуальні налаштування конфігурації broker, включаючи: <ul>
+               <li><code>broker</code></li>
+               <li><code>port</code></li>
+               <li><code>url</code> - перевизначає broker/port, щоб надати повний url підключення</li>
+               <li><code>username</code></li>
+               <li><code>password</code></li>
+           </ul>
+           <p>Якщо цю властивість встановлено і broker вже підключено, буде зареєстровано помилку, якщо тільки не встановлено властивість <code>force</code> - у цьому випадку він відключиться від broker, застосує нові налаштування і перепідключиться.</p>
+       </dd>
+    </dl>
+</script>
+
+<script type="text/html" data-help-name="mqtt-broker">
+    <p>Конфігурація для підключення до MQTT broker.</p>
+    <p>Ця конфігурація створить єдине з'єднання з broker, яке потім може бути повторно використано вузлами <code>MQTT In</code> та <code>MQTT Out</code>.</p>
+    <p>Вузол згенерує випадковий Client ID, якщо його не встановлено, а вузол налаштовано на використання Clean Session підключення. Якщо Client ID встановлено, він має бути унікальним для broker, до якого ви підключаєтесь.</p>
+    <div class="translator-note" style="border-left: 4px solid #17a2b8; padding: 10px; margin: 10px 0; background-color: #f8f9fa;">
+        <strong>Примітка перекладача щодо Clean Session:</strong> Якщо зняти прапорець "Clean Session" (Чиста сесія) і вказати фіксований Client ID, брокер запам'ятовуватиме підписки Node-RED навіть у разі обриву зв'язку. Усі повідомлення QoS 1 та 2, що надійшли під час відключення, будуть доставлені одразу після відновлення з'єднання.
+    </div>
+    <h4>Birth Message (Повідомлення при підключенні)</h4>
+    <p>Це повідомлення, яке буде опубліковано у вказаному topic щоразу, коли з'єднання встановлено.</p>
+    <h4>Close Message (Повідомлення при закритті)</h4>
+    <p>Це повідомлення, яке буде опубліковано у вказаному topic перед нормальним закриттям з'єднання, наприклад при перерозгортанні (deploy) вузла або при завершенні роботи.</p>
+    <h4>Will Message (Заповітне повідомлення / LWT)</h4>
+    <p>Це повідомлення, яке буде опубліковано брокером у разі неочікуваної втрати з'єднання вузлом.</p>
+    <div class="translator-note" style="border-left: 4px solid #17a2b8; padding: 10px; margin: 10px 0; background-color: #f8f9fa;">
+        <strong>Примітка перекладача:</strong> Will Message часто називають LWT (Last Will and Testament). Це дуже потужний механізм: коли Node-RED підключається до брокера, він передає йому "заповіт". Якщо брокер фіксує, що Node-RED відвалився (не відповідає на ping), брокер автоматично публікує цей LWT у заданий topic. Це дозволяє іншим клієнтам миттєво дізнатися, що Node-RED пішов в offline.
+    </div>
+    <h4>WebSockets</h4>
+    <p>Вузол можна налаштувати на використання WebSocket з'єднання. Для цього поле Server має бути налаштовано з повним URI для з'єднання. Наприклад:</p>
+    <pre>ws://example.com:4000/mqtt</pre>
+</script>

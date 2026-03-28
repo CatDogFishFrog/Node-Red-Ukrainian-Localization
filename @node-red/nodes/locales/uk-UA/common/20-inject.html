@@ -1,0 +1,42 @@
+<!--
+  Copyright JS Foundation and other contributors, http://js.foundation
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<script type="text/html" data-help-name="inject">
+<p>Відправляє (injects) повідомлення у flow або вручну, або через регулярні інтервали. <code>payload</code> повідомлення може бути різних типів, включаючи рядки (strings), об'єкти JavaScript або поточний час.</p>
+<h3>Виходи</h3>
+<dl class="message-properties">
+    <dt>payload<span class="property-type">різні типи</span></dt>
+    <dd>Налаштований <code>payload</code> повідомлення.</dd>
+    <dt class="optional">topic <span class="property-type">string</span></dt>
+    <dd>Необов'язкова властивість, яку можна налаштувати у вузлі.</dd>
+</dl>
+<h3>Деталі</h3>
+<p>Вузол Inject може ініціювати flow з певним значенням <code>payload</code>. За замовчуванням <code>payload</code> є міткою часу (timestamp) поточного часу в мілісекундах з 1 січня 1970 року.</p>
+<p>Вузол також підтримує відправку рядків, чисел, логічних значень (booleans), об'єктів JavaScript або значень з контексту <code>flow</code>/<code>global</code>.</p>
+<p>За замовчуванням вузол запускається вручну натисканням на його кнопку в редакторі. Його також можна налаштувати на відправку через регулярні інтервали або за розкладом.</p>
+<p>Його також можна налаштувати на одноразову відправку щоразу під час запуску (start) flow.</p>
+<p>Максимальний <i>Interval</i> (інтервал), який можна вказати, становить близько 596 годин / 24 днів. Однак, якщо ви розглядаєте інтервали, більші за один день, вам слід подумати про використання вузла планувальника (scheduler), який може впоратися з відключенням живлення та перезавантаженнями.</p>
+<p><b>Примітка</b>: Опції <i>"Interval between times"</i> (Інтервал між часом) та <i>"at a specific time"</i> (у певний час) використовують стандартну систему cron. Це означає, що 20 хвилин будуть на початку наступної години, 20 хвилин після та 40 хвилин після - а не через 20 хвилин від поточного моменту. Якщо ви хочете кожні 20 хвилин відтепер - використовуйте опцію <i>"interval"</i>.</p>
+<p><b>Примітка</b>: Щоб включити символ нового рядка (newline) у рядок, ви повинні використовувати вузол Function або Template для створення <code>payload</code>.</p>
+
+<div class="translator-note" style="border-left: 4px solid #17a2b8; padding: 10px; margin: 10px 0; background-color: #f8f9fa;">
+    <strong>Додаткова інформація щодо вузла inject:</strong>
+    <ul>
+        <li>Опція <i>"Inject once after [X] seconds"</i> є надзвичайно корисною для ініціалізації глобальних змінних або завантаження початкових налаштувань із бази даних при старті Node-RED.</li>
+        <li>Вузол Inject часто використовується як тригер для періодичного опитування API (наприклад, отримання погоди кожні 30 хвилин).</li>
+    </ul>
+</div>
+</script>

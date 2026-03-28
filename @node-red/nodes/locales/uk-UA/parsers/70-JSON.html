@@ -1,0 +1,48 @@
+<!--
+  Copyright JS Foundation and other contributors, http://js.foundation
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<script type="text/html" data-help-name="json">
+    <p>Конвертує JSON string у його представлення у вигляді JavaScript object та навпаки.</p>
+    <h3>Входи (Inputs)</h3>
+    <dl class="message-properties">
+        <dt>payload<span class="property-type">object | string</span></dt>
+        <dd>JavaScript object або JSON string.</dd>
+        <dt>schema<span class="property-type">object</span></dt>
+        <dd>Необов'язковий JSON Schema object для валідації payload.
+        Цю властивість буде видалено перед тим, як <code>msg</code> буде надіслано до наступного вузла.</dd>
+    </dl>
+    <h3>Виходи (Outputs)</h3>
+    <dl class="message-properties">
+        <dt>payload<span class="property-type">object | string</span></dt>
+        <dd>
+            <ul>
+                <li>Якщо на вході JSON string, він намагається розпарсити його у JavaScript object.</li>
+                <li>Якщо на вході JavaScript object, він створює JSON string. String за бажанням може бути добре відформатований (well-formatted).</li>
+            </ul>
+        </dd>
+        <dt>schemaError<span class="property-type">array</span></dt>
+        <dd>Якщо валідація JSON schema не вдається, вузол catch матиме властивість <code>schemaError</code>, що містить array помилок.</dd>
+    </dl>
+    <h3>Деталі</h3>
+    <p>За замовчуванням вузол працює з <code>msg.payload</code>, але може бути налаштований на конвертацію будь-якої властивості повідомлення.</p>
+    <p>Вузол також можна налаштувати на забезпечення певного кодування замість перемикання між двома. Це можна використовувати, наприклад, з вузлом <code>HTTP In</code>, щоб переконатися, що payload є розпарсеним object, навіть якщо вхідний запит не встановив свій content-type правильно, щоб вузол HTTP In міг виконати конвертацію автоматично.</p>
+    <p>Якщо вузол налаштовано на забезпечення того, що властивість кодується як String, і він отримує String, подальші перевірки властивості не проводитимуться. Він не перевірятиме, чи є String валідним JSON, і не переформатовуватиме його, якщо вибрано опцію форматування.</p>
+    <p>Для отримання додаткової інформації про JSON Schema ви можете ознайомитися зі специфікацією
+    <a href="http://json-schema.org/latest/json-schema-validation.html">тут</a>.</p>
+    <div class="translator-note" style="border-left: 4px solid #17a2b8; padding: 10px; margin: 10px 0; background-color: #f8f9fa;">
+        <strong>Примітка перекладача:</strong> Функція валідації за допомогою JSON Schema є надзвичайно потужною для створення надійних API. Якщо ви приймаєте дані через вузол HTTP In і передаєте їх у вузол JSON, у якому налаштована Schema, невалідні вхідні дані згенерують помилку. Цю помилку можна перехопити вузлом Catch і одразу повернути користувачеві HTTP-відповідь із кодом статусу 400 (Bad Request) та детальним описом помилок з масиву <code>schemaError</code>.
+    </div>
+</script>

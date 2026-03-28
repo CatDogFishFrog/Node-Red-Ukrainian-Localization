@@ -1,0 +1,40 @@
+<!--
+  Copyright JS Foundation and other contributors, http://js.foundation
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<script type="text/html" data-help-name="tcp in">
+    <p>Забезпечує вибір TCP входів. Може або підключатися до віддаленого TCP порту, або приймати вхідні з'єднання.</p>
+    <p><b>Зверніть увагу: </b>На деяких системах вам може знадобитися доступ з правами root або адміністратора для доступу до портів нижче 1024.</p>
+</script>
+
+<script type="text/html" data-help-name="tcp out">
+    <p>Забезпечує вибір TCP виходів. Може або підключатися до віддаленого TCP порту, приймати вхідні з'єднання, або відповідати на повідомлення, отримані від вузла TCP In.</p>
+    <p>Надсилається лише <code>msg.payload</code>.</p>
+    <p>Якщо <code>msg.payload</code> - це string, що містить Base64 кодування бінарних даних, опція декодування Base64 призведе до їх конвертації назад у бінарний формат перед відправкою.</p>
+    <div class="translator-note" style="border-left: 4px solid #17a2b8; padding: 10px; margin: 10px 0; background-color: #f8f9fa;">
+        <strong>Примітка перекладача:</strong> Використання Base64 вкрай зручне, якщо у вас багато проміжних вузлів, які краще працюють із текстом (strings), або ви хочете передати бінарні дані через JSON структуру, а потім безпечно надіслати їх у сирому вигляді (raw binary) через TCP-порт.
+    </div>
+    <p>Якщо <code>msg._session</code> відсутня, payload розсилається <b>всім</b> підключеним клієнтам.</p>
+    <p>У режимі Reply-to (Відповісти), встановлення <code>msg.reset = true</code> скине з'єднання, вказане у _session.id, або всі з'єднання, якщо _session.id не вказано.</p>
+    <p><b>Зверніть увагу: </b>На деяких системах вам може знадобитися доступ з правами root або адміністратора для доступу до портів нижче 1024.</p>
+</script>
+
+<script type="text/html" data-help-name="tcp request">
+    <p>Простий вузол TCP request - надсилає <code>msg.payload</code> на серверний tcp порт і очікує на відповідь.</p>
+    <p>Підключається, надсилає "request", та читає "response". Він може або рахувати кількість повернутих символів у фіксований buffer, зіставляти заданий символ перед поверненням, чекати фіксований тайм-аут (timeout) від першої відповіді і потім повертати дані, або "сидіти й чекати" на дані, чи відправити і потім закрити з'єднання одразу, не чекаючи відповіді.</p>
+    <p>Якщо вибрано режим "сидіти й чекати" (залишатися підключеним), ви можете надіслати <code>msg.reset = true</code> або <code>msg.reset = "host:port"</code> для примусового розриву з'єднання та автоматичного перепідключення.</p>
+    <p>Відповідь буде виведена у <code>msg.payload</code> як buffer, тому можливо вам знадобиться застосувати до нього .toString().</p>
+    <p>Якщо ви залишите tcp host або port порожніми, вони повинні бути задані через властивості <code>msg.host</code> та <code>msg.port</code> у кожному повідомленні, що надсилається до вузла.</p>
+</script>

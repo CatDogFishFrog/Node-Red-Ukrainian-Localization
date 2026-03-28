@@ -1,0 +1,63 @@
+<!--
+  Copyright JS Foundation and other contributors, http://js.foundation
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<script type="text/html" data-help-name="function">
+    <p>JavaScript функція для виконання над повідомленнями, що отримує вузол.</p>
+    <p>Повідомлення передаються у вигляді JavaScript об'єкта під назвою <code>msg</code>.</p>
+    <p>За звичаєм він матиме властивість <code>msg.payload</code>, що містить тіло повідомлення.</p>
+    <p>Очікується, що функція поверне об'єкт повідомлення (або кілька об'єктів повідомлень), але вона може нічого не повертати, щоб зупинити виконання flow.</p>
+    <p>Вкладка <b>On Start</b> містить код, який буде виконуватися при кожному запуску вузла. Вкладка <b>On Stop</b> містить код, який буде виконуватися під час зупинки вузла.</p>
+    <p>Якщо код On Start повертає об'єкт Promise, вузол не почне обробляти повідомлення, поки promise не буде виконано (resolved).</p>
+    <h3>Деталі</h3>
+    <p>Дивіться <a target="_blank" href="https://nodered.org/docs/writing-functions.html">онлайн документацію</a> для отримання додаткової інформації щодо написання функцій.</p>
+    <h4>Відправлення повідомлень</h4>
+    <p>Функція може або повернути повідомлення, які вона хоче передати наступним вузлам у flow, або може викликати <code>node.send(messages)</code>.</p>
+    <p>Вона може повертати/відправляти:</p>
+    <ul>
+      <li>один об'єкт повідомлення - передається вузлам, підключеним до першого виходу</li>
+      <li>масив об'єктів повідомлень - передається вузлам, підключеним до відповідних виходів</li>
+    </ul>
+    <p>Примітка: Код налаштування (setup) виконується під час ініціалізації вузлів. Тому, якщо <code>node.send</code> викликається на вкладці налаштування, наступні вузли можуть не мати змоги отримати повідомлення.</p>
+    <p>Якщо будь-який елемент масиву сам є масивом повідомлень, кілька повідомлень надсилаються на відповідний вихід.</p>
+    <p>Якщо повертається null, або сам по собі, або як елемент масиву, жодне повідомлення не передається далі.</p>
+    <h4>Логування та обробка помилок</h4>
+    <p>Для логування будь-якої інформації або повідомлення про помилку доступні наступні функції:</p>
+      <ul>
+          <li><code>node.log("Log message")</code></li>
+          <li><code>node.warn("Warning")</code></li>
+          <li><code>node.error("Error")</code></li>
+      </ul>
+    <p>Вузол Catch також може використовуватися для обробки помилок. Щоб викликати вузол Catch, передайте <code>msg</code> як другий аргумент до <code>node.error</code>:</p>
+    <pre>node.error("Error",msg);</pre>
+    <h4>Доступ до інформації про вузол</h4>
+    <p>Наступні властивості доступні для отримання інформації про вузол:</p>
+    <ul>
+        <li><code>node.id</code> - ідентифікатор вузла</li>
+        <li><code>node.name</code> - ім'я вузла</li>
+        <li><code>node.outputCount</code> - кількість виходів вузла</li>
+    </ul>
+    <h4>Використання змінних середовища</h4>
+    <p>Доступ до змінних середовища можна отримати за допомогою <code>env.get("MY_ENV_VAR")</code>.</p>
+
+    <div class="translator-note" style="border-left: 4px solid #17a2b8; padding: 10px; margin: 10px 0; background-color: #f8f9fa;">
+        <strong>Додаткова інформація щодо вузла function:</strong>
+        <ul>
+            <li>Використовуйте вузол function лише тоді, коли необхідна складна логіка. Для простих маніпуляцій з даними (перейменування властивостей, просте форматування) рекомендується використовувати вузли change або template, оскільки вони споживають менше пам'яті та працюють швидше.</li>
+            <li>Якщо ви створюєте нові об'єкти або масиви усередині функції для відправки на кілька виходів, використовуйте <code>RED.util.cloneMessage(msg)</code> для запобігання перехресному забрудненню даних між гілками flow.</li>
+            <li>Для асинхронних операцій у функції використовуйте <code>node.done()</code> для інформування середовища про завершення обробки повідомлення, що важливо для правильної роботи вузла Complete.</li>
+        </ul>
+    </div>
+</script>

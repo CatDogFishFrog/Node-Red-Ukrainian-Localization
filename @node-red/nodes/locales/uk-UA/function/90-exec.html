@@ -1,0 +1,80 @@
+<!--
+  Copyright JS Foundation and other contributors, http://js.foundation
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<script type="text/html" data-help-name="exec">
+    <p>Запускає системну команду і повертає її вивід.</p>
+    <p>Вузол може бути налаштований або на очікування завершення команди, або на відправку її виводу по мірі його генерації командою.</p>
+    <p>Команда, яка запускається, може бути налаштована у вузлі або надана в отриманому повідомленні.</p>
+
+    <h3>Входи</h3>
+    <dl class="message-properties">
+        <dt class="optional">payload <span class="property-type">string</span></dt>
+        <dd>якщо налаштовано відповідним чином, буде додано до виконуваної команди.</dd>
+        <dt class="optional">kill <span class="property-type">string</span></dt>
+        <dd>тип сигналу kill для надсилання існуючому процесу вузла exec.</dd>
+        <dt class="optional">pid <span class="property-type">number|string</span></dt>
+        <dd>ідентифікатор процесу (PID) існуючого процесу вузла exec, який потрібно завершити.</dd>
+    </dl>
+
+    <h3>Виходи</h3>
+    <ol class="node-ports">
+        <li>Стандартний вивід (Standard output)
+            <dl class="message-properties">
+                <dt>payload <span class="property-type">string</span></dt>
+                <dd>стандартний вивід команди.</dd>
+            </dl>
+            <dl class="message-properties">
+                <dt>rc <span class="property-type">object</span></dt>
+                <dd>тільки для режиму exec: копія об'єкта коду повернення (також доступно на порту 3)</dd>
+            </dl>
+        </li>
+        <li>Стандартна помилка (Standard error)
+            <dl class="message-properties">
+                <dt>payload <span class="property-type">string</span></dt>
+                <dd>стандартна помилка команди.</dd>
+            </dl>
+            <dl class="message-properties">
+                <dt>rc <span class="property-type">object</span></dt>
+                <dd>тільки для режиму exec: копія об'єкта коду повернення (також доступно на порту 3)</dd>
+            </dl>
+        </li>
+        <li>Код повернення (Return code)
+            <dl class="message-properties">
+                <dt>payload <span class="property-type">object</span></dt>
+                <dd>об'єкт, що містить код повернення та, можливо, властивості <code>message</code> і <code>signal</code>.</dd>
+            </dl>
+        </li>
+    </ol>
+    <h3>Деталі</h3>
+    <p>За замовчуванням використовується системний виклик <code>exec</code>, який викликає команду, чекає на її завершення, а потім повертає вивід. Наприклад, успішна команда повинна мати код повернення <code>{ code: 0 }</code>.</p>
+    <p>Опціонально можна використовувати <code>spawn</code>, який повертає вивід зі stdout та stderr під час виконання команди, зазвичай по одному рядку за раз. Після завершення він потім повертає об'єкт на 3-й порт. Наприклад, успішна команда повинна повернути <code>{ code: 0 }</code>.</p>
+    <p>Помилки можуть повертати додаткову інформацію на 3-му порту у <code>msg.payload</code>, таку як рядок <code>message</code> та рядок <code>signal</code>.</p>
+    <p>Команда для запуску визначається всередині вузла, з опцією додавання <code>msg.payload</code> та додаткового набору параметрів.</p>
+    <p>Команди або параметри з пробілами повинні бути взяті в лапки - <code>"Це один параметр"</code></p>
+    <p>Повернений <code>payload</code> зазвичай є <i>рядком</i> (string), якщо тільки не виявлено символи не в кодуванні UTF8, у цьому випадку це буде <i>буфер</i> (buffer).</p>
+    <p>Іконка статусу вузла та PID будуть видимі, поки вузол активний. Зміни цього статусу можна зчитувати за допомогою вузла <code>Status</code>.</p>
+    <p>Опція <code>Hide console</code> (Сховати консоль) приховає консоль процесу, яка зазвичай відображається на системах Windows.</p>
+    <h4>Завершення процесів (Killing processes)</h4>
+    <p>Надсилання <code>msg.kill</code> призведе до завершення одного активного процесу. <code>msg.kill</code> має бути рядком, що містить тип сигналу для відправки, наприклад, <code>SIGINT</code>, <code>SIGQUIT</code> або <code>SIGHUP</code>. За замовчуванням використовується <code>SIGTERM</code>, якщо встановлено порожній рядок.</p>
+    <p>Якщо у вузлі працює більше одного процесу, тоді також має бути встановлено <code>msg.pid</code> зі значенням PID процесу, який потрібно завершити.</p>
+    <p>Якщо в полі <code>Timeout</code> (Таймаут) вказано значення, то у випадку, якщо процес не завершився після закінчення вказаної кількості секунд, процес буде завершено автоматично.</p>
+    <p>Порада: якщо ви запускаєте програму на Python, вам може знадобитися використати параметр <code>-u</code>, щоб зупинити буферизацію виводу.</p>
+
+    <div class="translator-note" style="border-left: 4px solid #17a2b8; padding: 10px; margin: 10px 0; background-color: #f8f9fa;">
+        <strong>Додаткова інформація щодо вузла exec:</strong>
+        <p><strong>Попередження безпеки:</strong> Ніколи не передавайте неперевірені дані від користувачів безпосередньо у команду (наприклад, через <code>msg.payload</code>). Це може призвести до вразливості типу "Command Injection" (ін'єкція команд), коли зловмисник зможе виконати будь-який код на вашому сервері/хості.</p>
+    </div>
+</script>

@@ -1,0 +1,56 @@
+<!--
+  Copyright JS Foundation and other contributors, http://js.foundation
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<script type="text/html" data-help-name="template">
+    <p>Встановлює властивість на основі наданого шаблону.</p>
+    <h3>Входи</h3>
+    <dl class="message-properties">
+        <dt>msg <span class="property-type">object</span></dt>
+        <dd>Об'єкт msg, що містить інформацію для заповнення шаблону.</dd>
+        <dt class="optional">template <span class="property-type">string</span></dt>
+        <dd>Шаблон, який буде заповнений з <code>msg.payload</code>. Якщо це не налаштовано на панелі редагування, це можна встановити як властивість об'єкта msg.</dd>
+    </dl>
+    <h3>Виходи</h3>
+    <dl class="message-properties">
+        <dt>msg <span class="property-type">object</span></dt>
+        <dd>Повідомлення з властивістю, встановленою шляхом заповнення налаштованого шаблону властивостями із вхідного msg.</dd>
+    </dl>
+    <h3>Деталі</h3>
+    <p>За замовчуванням тут використовується формат <i><a href="http://mustache.github.io/mustache.5.html" target="_blank">mustache</a></i>, але за потреби його можна вимкнути.</p>
+    <p>Наприклад, коли шаблон:</p>
+    <pre>Hello {{payload.name}}. Today is {{date}}</pre>
+    <p>отримує повідомлення, що містить:</p>
+    <pre>{
+  date: "Monday",
+  payload: {
+    name: "Fred"
+  }
+}</pre>
+    <p>Отримана властивість буде такою:</p>
+    <pre>Hello Fred. Today is Monday</pre>
+    <p>Можна використовувати властивість із контексту flow або global. Просто використовуйте <code>{{flow.name}}</code> або <code>{{global.name}}</code>, або для постійного сховища (persistable store) <code>store</code> використовуйте <code>{{flow[store].name}}</code> або <code>{{global[store].name}}</code>.</p>
+    <p><b>Примітка: </b>За замовчуванням <i>mustache</i> екранує будь-які не буквено-цифрові символи або HTML-сутності в значеннях, які він підставляє. Щоб запобігти цьому, використовуйте <code>{{{потрійні}}}</code> фігурні дужки.</p>
+    <p>Якщо вам потрібно використовувати <code>{{ }}</code> у вашому вмісті, ви можете змінити символи, що використовуються для позначення шаблонних секцій. Наприклад, щоб замість цього використовувати <code>[[ ]]</code>, додайте наступний рядок на початок шаблону:</p>
+    <pre>{{=[[ ]]=}}</pre>
+    <h4>Використання змінних середовища</h4>
+    <p>Вузол template може отримати доступ до змінних середовища, використовуючи синтаксис:</p>
+    <pre>My favourite colour is {{env.COLOUR}}.</pre>
+
+    <div class="translator-note" style="border-left: 4px solid #17a2b8; padding: 10px; margin: 10px 0; background-color: #f8f9fa;">
+        <strong>Додаткова інформація щодо вузла template:</strong>
+        <p>Вузол template відмінно підходить для генерації динамічних HTML-сторінок, SQL-запитів, XML-документів або складних повідомлень для месенджерів (наприклад, Telegram). Якщо вимкнути формат <i>mustache</i>, вузол передає текст як є, що робить його зручним місцем для зберігання великих текстових блоків.</p>
+    </div>
+</script>
